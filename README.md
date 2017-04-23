@@ -18,3 +18,5 @@ Camera  | 8 MP or 13 MP, autofocus, LED flash
 
 
 ![Turkcell T50](http://webrazzi.com/wp-content/uploads/2014/05/turkcell-t50-turkcell-akilli-telefon-2.jpg "ZTE Blade Vec 4G")
+
+Bugs:Camera
