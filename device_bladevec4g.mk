@@ -72,8 +72,7 @@ PRODUCT_COPY_FILES += \
     device/zte/bladevec4g/etc/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
 	device/zte/bladevec4g/etc/audio_platform_info.xml:system/etc/audio_platform_info.xml \
     device/zte/bladevec4g/etc/media_profiles.xml:system/etc/media_profiles.xml \
-    device/zte/bladevec4g/etc/mixer_paths.xml:system/etc/mixer_paths.xml \
-    device/zte/bladevec4g/etc/thermal-engine-8226.conf:system/etc/thermal-engine-8226.conf
+    device/zte/bladevec4g/etc/mixer_paths.xml:system/etc/mixer_paths.xml
 
 # Ramdisk
 PRODUCT_COPY_FILES += \
