@@ -25,7 +25,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 DEVICE_PACKAGE_OVERLAYS += device/zte/bladevec4g/overlay
 
 # Boot
-
 TARGET_SCREEN_HEIGHT := 1280
 TARGET_SCREEN_WIDTH := 720
 TARGET_BOOTANIMATION_HALF_RES := true
@@ -67,12 +66,9 @@ PRODUCT_COPY_FILES += \
 
 # Configs
 PRODUCT_COPY_FILES += \
-    device/zte/bladevec4g/etc/audio_policy.conf:system/etc/audio_policy.conf \
-    device/zte/bladevec4g/etc/media_codecs.xml:system/etc/media_codecs.xml \
-    device/zte/bladevec4g/etc/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
-	device/zte/bladevec4g/etc/audio_platform_info.xml:system/etc/audio_platform_info.xml \
-    device/zte/bladevec4g/etc/media_profiles.xml:system/etc/media_profiles.xml \
-    device/zte/bladevec4g/etc/mixer_paths.xml:system/etc/mixer_paths.xml
+    device/zte/bladevec4g/configs/media_codecs.xml:system/etc/media_codecs.xml \
+    device/zte/bladevec4g/configs/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
+    device/zte/bladevec4g/configs/media_profiles.xml:system/etc/media_profiles.xml
 
 # Ramdisk
 PRODUCT_COPY_FILES += \
@@ -107,6 +103,14 @@ PRODUCT_PACKAGES += \
     libqcomvisualizer \
     libqcomvoiceprocessing \
     tinymix
+
+
+# Audio configuration
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf \
+    $(LOCAL_PATH)/audio/audio_platform_info.xml:system/etc/audio_platform_info.xml \
+    $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
+    $(LOCAL_PATH)/audio/mixer_paths.xml:system/etc/mixer_paths.xml
 
 # Misc dependency packages
 PRODUCT_PACKAGES += \
