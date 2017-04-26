@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2013 The CyanogenMod Project
+# Copyright (C) 2017 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,23 +19,10 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
-# Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Specific overlay
-DEVICE_PACKAGE_OVERLAYS += device/zte/bladevec4g/overlay
-
-# Boot
-TARGET_SCREEN_HEIGHT := 1280
-TARGET_SCREEN_WIDTH := 720
-TARGET_BOOTANIMATION_HALF_RES := true
-
-# Fix ADB
-ADDITIONAL_DEFAULT_PROPERTIES += \
-ro.secure=0 \
-ro.debuggable=1 \
-persist.sys.usb.config=mtp \
-ro.adb.secure=0
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -66,22 +54,36 @@ PRODUCT_COPY_FILES += \
 
 # Configs
 PRODUCT_COPY_FILES += \
-    device/zte/bladevec4g/configs/media_codecs.xml:system/etc/media_codecs.xml \
-    device/zte/bladevec4g/configs/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
-    device/zte/bladevec4g/configs/media_profiles.xml:system/etc/media_profiles.xml
+    $(LOCAL_PATH)/configs/media_codecs.xml:system/etc/media_codecs.xml \
+    $(LOCAL_PATH)/configs/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
+    $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
 
 # Ramdisk
 PRODUCT_COPY_FILES += \
-    device/zte/bladevec4g/rootdir/fstab.qcom:root/fstab.qcom \
-    device/zte/bladevec4g/rootdir/init.qcom.rc:root/init.qcom.rc \
-    device/zte/bladevec4g/rootdir/init.qcom.sh:root/init.qcom.sh \
-    device/zte/bladevec4g/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc \
-    device/zte/bladevec4g/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc \
-    device/zte/bladevec4g/rootdir/init.qcom.ril.sh:system/etc/init.qcom.ril.sh
+    $(LOCAL_PATH)/rootdir/fstab.qcom:root/fstab.qcom \
+    $(LOCAL_PATH)/rootdir/init.qcom.rc:root/init.qcom.rc \
+    $(LOCAL_PATH)/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc \
+    $(LOCAL_PATH)/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc \
+    $(LOCAL_PATH)/rootdir/init.qcom.ril.sh:system/etc/init.qcom.ril.sh
 
+# GPS
 PRODUCT_COPY_FILES += \
-    device/zte/bladevec4g/rootdir/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
-    device/zte/bladevec4g/rootdir/init.wcnss.rc:root/init.wcnss.rc
+    $(LOCAL_PATH)/gps/etc/gps.conf:system/etc/gps.conf \
+    $(LOCAL_PATH)/gps/etc/flp.conf:system/etc/flp.conf \
+    $(LOCAL_PATH)/gps/etc/izat.conf:system/etc/izat.conf \
+    $(LOCAL_PATH)/gps/etc/quipc.conf:system/etc/quipc.conf \
+    $(LOCAL_PATH)/gps/etc/sap.conf:system/etc/sap.conf
+
+# Qcom wlan
+ifeq ($(BOARD_HAS_QCOM_WCNSS),true)
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:system/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini \
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv.bin \
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_wlan_nv.bin:system/etc/firmware/wlan/prima/WCNSS_qcom_wlan_nv_boot.bin \
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:system/etc/wifi/WCNSS_qcom_cfg.ini \
+    $(LOCAL_PATH)/prebuilt/etc/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
+    $(LOCAL_PATH)/rootdir/init.wcnss.rc:root/init.wcnss.rc
 
 PRODUCT_PROPERTY_OVERRIDES += ro.qualcomm.bt.hci_transport=smd
 
@@ -90,6 +92,7 @@ PRODUCT_PACKAGES += \
     libfmjni \
     wcnss_service \
     libwcnss_qmi
+endif
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -104,7 +107,6 @@ PRODUCT_PACKAGES += \
     libqcomvoiceprocessing \
     tinymix
 
-
 # Audio configuration
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/audio_effects.conf:system/vendor/etc/audio_effects.conf \
@@ -112,12 +114,14 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
     $(LOCAL_PATH)/audio/mixer_paths.xml:system/etc/mixer_paths.xml
 
+
 # Misc dependency packages
 PRODUCT_PACKAGES += \
     libxml2 \
     libcurl \
     libboringssl-compat \
-	libstlport
+    librmnetctl
+
 
 # Ebtables
 PRODUCT_PACKAGES += \
@@ -127,6 +131,9 @@ PRODUCT_PACKAGES += \
 
 # Keystore
 PRODUCT_PACKAGES += keystore.msm8226
+
+# Charger
+PRODUCT_PACKAGES += charger charger_res_images
 
 # Gello
 PRODUCT_PACKAGES += \
@@ -143,8 +150,9 @@ PRODUCT_PACKAGES += \
     hwcomposer.msm8226 \
     lights.msm8226 \
     memtrack.msm8226 \
-    power.msm8226
-
+    power.msm8226 \
+    sensors.msm8226 \
+    sensors.qcom
 
 # OMX
 PRODUCT_PACKAGES += \
@@ -153,9 +161,12 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libstagefrighthw
 
+# Recovery
+PRODUCT_PACKAGES += \
+    imgdiff
+
 #wifi
 PRODUCT_PACKAGES += \
-    dhcpcd.conf \
     libwpa_client \
     hostapd \
     wpa_supplicant \
@@ -166,10 +177,18 @@ PRODUCT_PACKAGES += \
     hostapd.accept \
     hostapd.deny
 
+# Telephony-ext
+PRODUCT_PACKAGES += telephony-ext
+PRODUCT_BOOT_JARS += telephony-ext
+
 # Camera
 PRODUCT_PACKAGES += \
     camera.msm8226 \
     Snap
+
+
+# Specific overlay
+DEVICE_PACKAGE_OVERLAYS += device/zte/bladevec4g/overlay
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal
@@ -181,6 +200,3 @@ BOARD_HAS_QCOM_WCNSS := true
 # Inherit from bladevec4g
 $(call inherit-product, vendor/zte/bladevec4g/bladevec4g-vendor.mk)
 
-
-# System properties
--include device/zte/bladevec4g/system_prop.mk

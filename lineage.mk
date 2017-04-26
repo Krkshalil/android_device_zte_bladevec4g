@@ -1,4 +1,4 @@
-# Inherit some common CM stuff.
+# Inherit some common lineage stuff.
 $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, device/zte/bladevec4g/device_bladevec4g.mk)
@@ -15,5 +15,6 @@ PRODUCT_DEVICE := bladevec4g
 PRODUCT_MANUFACTURER := ZTE
 PRODUCT_BRAND := zte
 
-# Root
+
+#Root
 WITH_SU=true

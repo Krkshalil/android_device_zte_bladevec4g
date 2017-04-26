@@ -18,6 +18,7 @@
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
 
+#define BTM_DEF_LOCAL_NAME   "ZTE Blade Vec 4G"
 // Disables read remote device feature
 #define BTA_SKIP_BLE_READ_REMOTE_FEAT TRUE
 #define MAX_L2CAP_CHANNELS    14
@@ -25,4 +26,7 @@
 #define BTA_BLE_SKIP_CONN_UPD  TRUE
 // Enables interleaved scan
 #define BTA_HOST_INTERLEAVE_SEARCH TRUE
+
+/* Defined if the kernel does not have support for CLOCK_BOOTTIME_ALARM */
+#define KERNEL_MISSING_CLOCK_BOOTTIME_ALARM TRUE
 #endif
