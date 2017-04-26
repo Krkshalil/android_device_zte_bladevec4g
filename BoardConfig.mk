@@ -161,6 +161,10 @@ TARGET_RECOVERY_FSTAB := $(VENDOR_PATH)/rootdir/fstab.qcom
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
 
+# TWRP
+TW_THEME := portrait_hdpi
+PRODUCT_COPY_FILES += device/zte/bladevec4g/twrp.fstab:recovery/root/etc/twrp.fstab
+
 # Time services
 BOARD_USES_QC_TIME_SERVICES := true
 
